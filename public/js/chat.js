@@ -14,7 +14,7 @@ const locationMessageTemplate = document.querySelector(
 
 //Options
 
-const { username, room } = Qs.parse(location.search, {
+const { username, room, password } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
 
@@ -86,10 +86,16 @@ $sendLocationButton.addEventListener("click", () => {
   });
 });
 
-socket.emit("join", { username, room}, (error) => {
+socket.emit("join", { username, room, password}, (error) => {
   if(error) {
     alert(error)
     location.href="/"
+  }
+  if(room==="Private"){
+    if(password!=="amogus") {
+      alert("Acsess Denied")
+      location.href="/"
+    }
   }
 
 });
