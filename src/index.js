@@ -68,7 +68,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendLocation", (coords, callback) => {
-    const user = getUser(socket.id);
+    try {
+        const user = getUser(socket.id);
     io.to(user.room).emit(
       "locationMessage",
       generateLocationMessage(
@@ -77,10 +78,20 @@ io.on("connection", (socket) => {
       )
     );
     callback();
+    } catch (e) {
+      alert("Something went wrong")
+      console.log(e)
+    }
+   
   });
 
   socket.on("disconnect", () => {
     const user = removeUser(socket.id);
+
+    if(!user){
+      return
+      alert("Something went wrong")
+    }
 
     if (user) {
       io.emit(
